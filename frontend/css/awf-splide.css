@@ -1,0 +1,26 @@
+#awf-goats-carousel li.splide__slide {
+    max-height: 200px;
+    overflow: hidden;
+    padding: 8px;
+}
+
+#awf-goats-carousel .splide__arrow--prev {
+    left: -34px;
+    outline: none;
+}
+
+#awf-goats-carousel .splide__arrow--next {
+    left: calc(100% + 8px);
+    outline: none;
+    right: auto;
+}
+
+#awf-goats-carousel .splide__pagination {
+    top: 100%;
+}
+
+#awf-goats-carousel .splide__pagination__page {
+    background: #E39F04;
+    opacity: .7;
+    outline: none;
+}

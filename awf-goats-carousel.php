@@ -69,20 +69,50 @@ Class ArdorWoodFarmGoats {
 
   // Add Shortcode
   public static function registers_awf_goats_shortcode( $atts ) {
+    global $post;
+
+    // Enqueues carousel scripts and styles
+
+    wp_enqueue_script( 'splide_carousel_js_cdn', '//cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js', [], null, true );
+    add_action( 'wp_enqueue_scripts', 'splide_carousel_js_cdn' );
+
+    wp_enqueue_script( 'splide_carousel_js', plugin_dir_url( __FILE__ ) . 'frontend/js/awf-splide.js', ['splide_carousel_js_cdn'], null, true );
+    add_action( 'wp_enqueue_scripts', 'splide_carousel_js' );
+
+    wp_enqueue_style( 'splide_carousel_styles_cdn', '//cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css' );
+    add_action( 'wp_enqueue_scripts', 'splide_carousel_styles_cdn' );
+
+    wp_enqueue_style( 'splide_carousel_styles', plugin_dir_url( __FILE__ ) . 'frontend/css/awf-splide.css' );
+    add_action( 'wp_enqueue_scripts', 'splide_carousel_styles' );
 
     ob_start();
 
     // Attributes
     $atts = shortcode_atts(
       array(
-        'category_name' => '',
-        'post_type' => 'awf-goats'
+        'category' => '',
       ),
       $atts,
       'awf_goats'
     );
 
-    return '';
+    $afw_goat_loop = new WP_Query([
+      'post_type'     => 'awf-goats',
+      'category_name' => sanitize_text_field( $atts['category'] )
+    ]);
+
+    ?>
+    <section id="awf-goats-carousel" class="splide">
+      <div class="splide__track">
+        <ul class="awf-goats-loop splide__list">
+          <?php while ( $afw_goat_loop->have_posts() ) : $afw_goat_loop->the_post(); ?>
+            <li class="splide__slide"><a href="<?php echo get_the_post_thumbnail_url( $post->ID ); ?>"><?php the_post_thumbnail( 'medium' ); ?></a></li>
+          <?php endwhile; ?>
+        </ul>
+      </div>
+    </section>
+
+    <?php wp_reset_postdata();
 
     return ob_get_clean();
   }
