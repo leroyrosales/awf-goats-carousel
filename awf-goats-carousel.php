@@ -69,6 +69,7 @@ Class ArdorWoodFarmGoats {
 
   // Add Shortcode
   public static function registers_awf_goats_shortcode( $atts ) {
+    global $post;
 
     ob_start();
 
@@ -90,7 +91,7 @@ Class ArdorWoodFarmGoats {
 
     <ul class="awf-goats-loop">
       <?php while ( $afw_goat_loop->have_posts() ) : $afw_goat_loop->the_post(); ?>
-        <li><?php the_post_thumbnail('large'); ?></li>
+        <li><a href="<?php echo get_the_post_thumbnail_url( $post->ID ); ?>"><?php the_post_thumbnail('large'); ?></a></li>
       <?php endwhile; ?>
     </ul>
 
