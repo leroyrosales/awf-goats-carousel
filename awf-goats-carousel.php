@@ -75,14 +75,26 @@ Class ArdorWoodFarmGoats {
     // Attributes
     $atts = shortcode_atts(
       array(
-        'category_name' => '',
-        'post_type' => 'awf-goats'
+        'category' => '',
       ),
       $atts,
       'awf_goats'
     );
 
-    return '';
+    $afw_goat_loop = new WP_Query([
+      'post_type'     => 'awf-goats',
+      'category_name' => sanitize_text_field( $atts['category'] )
+    ]);
+
+    ?>
+
+    <ul class="awf-goats-loop">
+      <?php while ( $afw_goat_loop->have_posts() ) : $afw_goat_loop->the_post(); ?>
+        <li><?php the_post_thumbnail('large'); ?></li>
+      <?php endwhile; ?>
+    </ul>
+
+    <?php wp_reset_postdata();
 
     return ob_get_clean();
   }
